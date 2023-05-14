@@ -58,16 +58,14 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
 app.get('/videos', (req: Request, res: Response) => {
   res.status(200).send(db.videos)
 })
-
 app.get('/videos/:id', (req: Request, res: Response) => {
-  const id = +req.params.id;
-  const video = db.videos.find(v => v.id === id);
-  if(!video) {
-    res.sendStatus(404)
-    return
-  }
-  res.status(200).send(video)
-}) 
+  const videoId = +req.params.id
+  const video = db.videos.find(video => video.id === videoId)
+  if (!video) return res.sendStatus(404)
+  return res.status(200).send(video)
+ 
+})
+
 
 app.post('/videos', (req: Request, res: Response) => {
     const title = req.body.title
@@ -82,14 +80,7 @@ app.post('/videos', (req: Request, res: Response) => {
     if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
      errors.push({message: 'error at author', filed: 'title'})
     }
-    if (availableResolutions) {
-      const resVal = availableResolutions.filter((value:string) => {
-        return resVal.startWith("P")
-      })
-      if (resVal.length > 5) {
-       errors.push({message: 'error at resolutions', filed: 'title'})
-    } 
-  }
+    //if (availableResolutions) 
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
     const newVideo: videoType = {
       id: +(new Date()),
@@ -127,14 +118,8 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     if (!video.author || typeof video.author !== 'string' ||  video.author.length > 20) {
       errors2.push({message: 'error at author', filed: 'title'})
     }
-    if (availableResolutions) {
-      const resVal = availableResolutions.filter((value:string) => {
-        return resVal.startWith("P")
-      })
-      if (resVal.length > 5) {
-       errors2.push({message: 'error at resolutions', filed: 'title'})
-    } 
-  }
+    //if (availableResolutions) {
+     
   if (video.minAgeRestriction !== null && typeof video.minAgeRestriction !== "number" ) {
       errors2.push({message: 'error ', filed: 'title'})
     } else if (typeof video.minAgeRestriction === "number") {
