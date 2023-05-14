@@ -85,7 +85,7 @@ app.post('/videos', (req: Request, res: Response) => {
     //}
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
     const newVideo: videoType = {
-      id: +(today.getDate() + 1),
+      id: +today.setDate(today.getDate() + 1),
       title : title,
       author,
       canBeDownloaded: false,
@@ -122,18 +122,18 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     }
     //if (availableResolutions) {
      
-  if (video.minAgeRestriction !== null && typeof video.minAgeRestriction !== "number" ) {
+    if (video.minAgeRestriction !== null && typeof video.minAgeRestriction !== "number" ) {
       errors2.push({message: 'error ', field: 'title'})
     } else if (typeof video.minAgeRestriction === "number") {
-      if (+video.minAgeRestriction <1 || +video.minAgeRestriction > 18) {
+    if (+video.minAgeRestriction <1 || +video.minAgeRestriction > 18) {
         errors2.push({message: 'error ', field: 'canBeDownloaded'})
       }
-      if (video.publicationDate !== "string" ) {
+    if (video.publicationDate !== "string" ) {
         errors2.push({message: 'error ', field: 'title'})
       }
-      if (errors2.length > 0) return res.status(400).send({errorsMessages: errors2})
+      
     }
-
+    if (errors2.length > 0) return res.status(400).send({errorsMessages: errors2})
     
      res.sendStatus(204)
    }
