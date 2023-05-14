@@ -30,6 +30,18 @@ export type videoType = {
 export type DB = {
   videos: videoType[]
 }
+let videoI = [
+  {
+    "id": 0,
+    "title": "Nadejda",
+    "author": "string",
+    "canBeDownloaded": true,
+    "minAgeRestriction": null,
+    "createdAt": new Date().toISOString(),
+    "publicationDate": new Date().toISOString(),
+    "availableResolutions": ["string"]
+  }
+]
 
 const db: DB = {
   videos: [
@@ -68,13 +80,14 @@ app.get('/videos', (req: Request, res: Response) => {
   res.status(200).send(db.videos)
 })
 
-app.get('/videos/id', (req: Request, res: Response) => {
+app.get('/videos/:id', (req: Request, res: Response) => {
   const videoId = +req.params.id
-  const video = db.videos.find(video => video.id === videoId)
-  if (!video) return res.sendStatus(404)
-  return res.status(200).send({video})
- 
-})
+  const video = db.videos.find(v=> v.id === videoId)
+  res.status(200).send(videoI)
+}
+
+) 
+
 app.post('/videos', (req: Request, res: Response) => {
     const title = req.body.title
     const author = req.body.author
@@ -92,9 +105,10 @@ app.post('/videos', (req: Request, res: Response) => {
       const resVal = availableResolutions.filter((value:any) => {
         return resVal.startWith("P")
       })
+      if (resVal.length > 5) {
        errors.push({message: 'error at resolutions', filed: 'title'})
     } 
-    
+  }
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
     const newVideo: videoType = {
       id: +(new Date()),
@@ -136,8 +150,10 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       const resVal = availableResolutions.filter((value:any) => {
         return resVal.startWith("P")
       })
+      if (resVal.length > 5) {
        errors2.push({message: 'error at resolutions', filed: 'title'})
     } 
+  }
   if (video.minAgeRestriction !== null && typeof video.minAgeRestriction !== "number" ) {
       errors2.push({message: 'error ', filed: 'title'})
     } else if (typeof video.minAgeRestriction === "number") {
