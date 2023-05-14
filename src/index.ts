@@ -88,13 +88,11 @@ app.post('/videos', (req: Request, res: Response) => {
     if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
      errors.push({message: 'error at author', filed: 'title'})
     }
-    if (availableResolutions ) {
-      const length = availableResolutions.length //поменять проверку для энамкиБ а учше вообще убрать саму энемку заменив на массив 
-      let resVal = availableResolutions.filter((value: string) => {
-        return availableResolutions.includes(value)
+    if (availableResolutions) {
+      const resVal = availableResolutions.filter((value:any) => {
+        return resVal.startWith("P")
       })
-      if (resVal.length < length) {
-        errors.push({message: 'error at resolutions', filed: 'title'})
+       errors.push({message: 'error at resolutions', filed: 'title'})
     } 
     
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
@@ -111,7 +109,7 @@ app.post('/videos', (req: Request, res: Response) => {
     db.videos.push(newVideo)
     res.status(201).send(newVideo)
   }
-})
+)
 
 app.put('/videos/:id', (req: Request, res: Response) => {
   
@@ -134,13 +132,11 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     if (!video.author || typeof video.author !== 'string' ||  video.author.length > 20) {
       errors2.push({message: 'error at author', filed: 'title'})
     }
-    if (video.availableResolutions) {
-      const length = video.availableResolutions.length
-      let resVal = video.availableResolutions.filter((value: string) => {
-        return availableResolutions.includes(value)
+    if (availableResolutions) {
+      const resVal = availableResolutions.filter((value:any) => {
+        return resVal.startWith("P")
       })
-      if (resVal.length < length) {
-        errors2.push({message: 'error at resolutions', filed: 'title'})
+       errors2.push({message: 'error at resolutions', filed: 'title'})
     } 
   if (video.minAgeRestriction !== null && typeof video.minAgeRestriction !== "number" ) {
       errors2.push({message: 'error ', filed: 'title'})
@@ -156,7 +152,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     
      res.sendStatus(204)
    }
-  })
+  )
     
     
 app.delete('/videos/:id', (req: Request, res: Response) => {
