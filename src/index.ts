@@ -118,7 +118,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       errors2.push({message: 'error at title', field: 'title'})
     }
     if (!video.author || typeof video.author !== 'string' ||  video.author.length > 20) {
-      errors2.push({message: 'error at author', field: 'title'})
+      errors2.push({message: 'error at author', field: 'author'})
     }
     //if (availableResolutions) {
      
