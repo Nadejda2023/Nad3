@@ -39,7 +39,7 @@ let videoI = [
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
     "publicationDate": new Date().toISOString(),
-    "availableResolutions": ["string"]
+    "availableResolutions": ["P144"]
   }
 ]
 
@@ -53,7 +53,7 @@ const db: DB = {
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
     "publicationDate": new Date().toISOString(),
-    "availableResolutions": ["string"]
+    "availableResolutions": "P144"
   },
   {
     "id": 1,
@@ -63,7 +63,7 @@ const db: DB = {
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
     "publicationDate": new Date().toISOString(),
-    "availableResolutions": ["string"]
+    "availableResolutions": ["P144"]
   }
 ]
 }
@@ -83,8 +83,23 @@ app.get('/videos', (req: Request, res: Response) => {
 app.get('/videos/:id', (req: Request, res: Response) => {
   const videoId = +req.params.id
   const video = db.videos.find(v=> v.id === videoId)
-  res.status(200).send(videoI)
+  if (!video) {
+    res.status(400)
+  }
+  const videoI: videoType = {
+    id: +(new Date()),
+    title : "title",
+    author: "Nadejda",
+    canBeDownloaded: false,
+    minAgeRestriction: null,
+    createdAt: new Date().toISOString(),
+    publicationDate: today.toISOString(), 
+    availableResolutions: "P144"
+  }
+  db.videos.push(videoI)
+  res.status(201).send(videoI)
 }
+  
 
 ) 
 
