@@ -24,7 +24,7 @@ export type videoType = {
   minAgeRestriction: null | number, 
   createdAt: string,
   publicationDate: string,
-  availableResolutions: any
+  availableResolutions: string[]
 }
 
 export type DB = {
@@ -42,7 +42,7 @@ const db: DB = {
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
     "publicationDate": new Date().toISOString(),
-    "availableResolutions": "P144"
+    "availableResolutions": []
   },
   {
     "id": 1,
@@ -52,7 +52,7 @@ const db: DB = {
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
     "publicationDate": new Date().toISOString(),
-    "availableResolutions": ["P144"]
+    "availableResolutions": []
   }
 ]
 }
@@ -70,27 +70,14 @@ app.get('/videos', (req: Request, res: Response) => {
 })
 
 app.get('/videos/:id', (req: Request, res: Response) => {
-  const id = +req.params.id
-  const video = db.videos.find(v=> v.id === id)
-  if (!video) {
-    res.status(400)
+  const id = +req.params.id;
+  const video = db.videos.find(v => v.id === id);
+  if(!video) {
+    res.sendStatus(404)
+    return
   }
-  const videoId: videoType = {
-    id: +(new Date()),
-    title : "title",
-    author: "Nadejda",
-    canBeDownloaded: false,
-    minAgeRestriction: null,
-    createdAt: new Date().toISOString(),
-    publicationDate: today.toISOString(), 
-    availableResolutions: "P144"
-  }
-  db.videos.push(videoId)
-  res.status(201).send(videoId)
-}
-  
-
-) 
+  res.status(200).send(video)
+}) 
 
 app.post('/videos', (req: Request, res: Response) => {
     const title = req.body.title
@@ -106,7 +93,7 @@ app.post('/videos', (req: Request, res: Response) => {
      errors.push({message: 'error at author', filed: 'title'})
     }
     if (availableResolutions) {
-      const resVal = availableResolutions.filter((value:any) => {
+      const resVal = availableResolutions.filter((value:string) => {
         return resVal.startWith("P")
       })
       if (resVal.length > 5) {
@@ -151,7 +138,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       errors2.push({message: 'error at author', filed: 'title'})
     }
     if (availableResolutions) {
-      const resVal = availableResolutions.filter((value:any) => {
+      const resVal = availableResolutions.filter((value:string) => {
         return resVal.startWith("P")
       })
       if (resVal.length > 5) {
