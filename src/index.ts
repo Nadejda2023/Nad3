@@ -78,7 +78,7 @@ app.post('/videos', (req: Request, res: Response) => {
       errors.push({message: 'error at title', field: 'title'})
     }
     if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
-     errors.push({message: 'error at author', field: 'title'})
+     errors.push({message: 'error at author', field: 'author'})
     }
     //if (availableResolutions.length > 0 && availableResolutions.indexOf(availableResolutions)) {
 
@@ -131,6 +131,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       if (video.publicationDate !== "string" ) {
         errors2.push({message: 'error ', field: 'title'})
       }
+      if (errors2.length > 0) return res.status(400).send({errorsMessages: errors2})
     }
 
     
