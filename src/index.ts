@@ -30,18 +30,7 @@ export type videoType = {
 export type DB = {
   videos: videoType[]
 }
-let videoI = [
-  {
-    "id": 0,
-    "title": "Nadejda",
-    "author": "string",
-    "canBeDownloaded": true,
-    "minAgeRestriction": null,
-    "createdAt": new Date().toISOString(),
-    "publicationDate": new Date().toISOString(),
-    "availableResolutions": ["P144"]
-  }
-]
+
 
 const db: DB = {
   videos: [
@@ -81,12 +70,12 @@ app.get('/videos', (req: Request, res: Response) => {
 })
 
 app.get('/videos/:id', (req: Request, res: Response) => {
-  const videoId = +req.params.id
-  const video = db.videos.find(v=> v.id === videoId)
+  const id = +req.params.id
+  const video = db.videos.find(v=> v.id === id)
   if (!video) {
     res.status(400)
   }
-  const videoI: videoType = {
+  const videoId: videoType = {
     id: +(new Date()),
     title : "title",
     author: "Nadejda",
@@ -96,8 +85,8 @@ app.get('/videos/:id', (req: Request, res: Response) => {
     publicationDate: today.toISOString(), 
     availableResolutions: "P144"
   }
-  db.videos.push(videoI)
-  res.status(201).send(videoI)
+  db.videos.push(videoId)
+  res.status(201).send(videoId)
 }
   
 
