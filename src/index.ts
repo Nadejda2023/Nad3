@@ -38,16 +38,6 @@ const db: DB = {
     "id": 0,
     "title": "Nadejda",
     "author": "string",
-    "canBeDownloaded": true,
-    "minAgeRestriction": null,
-    "createdAt": new Date().toISOString(),
-    "publicationDate": new Date().toISOString(),
-    "availableResolutions": []
-  },
-  {
-    "id": 1,
-    "title": "Nadejda",
-    "author": "string",
     "canBeDownloaded": false,
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
