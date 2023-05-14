@@ -14,8 +14,7 @@ const port = process.env.PORT || 3003
 const today = new Date();
 today.setDate(today.getDate() + 1);
 
-//TODO enum? P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"
-//testing message
+
 const resolutionType = ["P144","P240","P360","P480",'P720','P1080',"P1440","P2160"]
 export type videoType = {
   id: number,
@@ -36,7 +35,7 @@ const db: DB = {
   videos: [
   {
     "id": 0,
-    "title": "string",
+    "title": "Nadejda",
     "author": "string",
     "canBeDownloaded": true,
     "minAgeRestriction": null,
@@ -46,7 +45,7 @@ const db: DB = {
   },
   {
     "id": 1,
-    "title": "string",
+    "title": "Nadejda",
     "author": "string",
     "canBeDownloaded": false,
     "minAgeRestriction": null,
@@ -87,7 +86,7 @@ app.post('/videos', (req: Request, res: Response) => {
       errors.push({message: 'error at title', filed: 'title'})
     }
     if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
-     errors.push({message: 'error at author', filed: 'author'})
+     errors.push({message: 'error at author', filed: 'title'})
     }
     if (availableResolutions ) {
       const length = availableResolutions.length //поменять проверку для энамкиБ а учше вообще убрать саму энемку заменив на массив 
@@ -95,7 +94,7 @@ app.post('/videos', (req: Request, res: Response) => {
         return availableResolutions.includes(value)
       })
       if (resVal.length < length) {
-        errors.push({message: 'error at resolutions', filed: 'resolutions'})
+        errors.push({message: 'error at resolutions', filed: 'title'})
     } 
     
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
@@ -133,7 +132,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       errors2.push({message: 'error at title', filed: 'title'})
     }
     if (!video.author || typeof video.author !== 'string' ||  video.author.length > 20) {
-      errors2.push({message: 'error at author', filed: 'author'})
+      errors2.push({message: 'error at author', filed: 'title'})
     }
     if (video.availableResolutions) {
       const length = video.availableResolutions.length
@@ -141,16 +140,16 @@ app.put('/videos/:id', (req: Request, res: Response) => {
         return availableResolutions.includes(value)
       })
       if (resVal.length < length) {
-        errors2.push({message: 'error at resolutions', filed: 'resolutions'})
+        errors2.push({message: 'error at resolutions', filed: 'title'})
     } 
   if (video.minAgeRestriction !== null && typeof video.minAgeRestriction !== "number" ) {
-      errors2.push({message: 'error ', filed: 'filed'})
+      errors2.push({message: 'error ', filed: 'title'})
     } else if (typeof video.minAgeRestriction === "number") {
       if (+video.minAgeRestriction <1 || +video.minAgeRestriction > 18) {
-        errors2.push({message: 'error ', filed: 'filed'})
+        errors2.push({message: 'error ', filed: 'title'})
       }
       if (video.publicationDate !== "string" ) {
-        errors2.push({message: 'error ', filed: 'filed'})
+        errors2.push({message: 'error ', filed: 'title'})
       }
     }
 
