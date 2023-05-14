@@ -75,12 +75,14 @@ app.post('/videos', (req: Request, res: Response) => {
     
 
     if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
-      errors.push({message: 'error at title', filed: 'title'})
+      errors.push({message: 'error at title', field: 'title'})
     }
     if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
-     errors.push({message: 'error at author', filed: 'title'})
+     errors.push({message: 'error at author', field: 'title'})
     }
-    //if (availableResolutions) 
+    //if (availableResolutions.length > 0 && availableResolutions.indexOf(availableResolutions)) {
+
+    //}
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
     const newVideo: videoType = {
       id: +(new Date()),
@@ -113,21 +115,21 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     const errors2 = []
 
     if (!video.title || typeof video.title !== 'string' || !video.title.trim() || video.title.length > 40) {
-      errors2.push({message: 'error at title', filed: 'title'})
+      errors2.push({message: 'error at title', field: 'title'})
     }
     if (!video.author || typeof video.author !== 'string' ||  video.author.length > 20) {
-      errors2.push({message: 'error at author', filed: 'title'})
+      errors2.push({message: 'error at author', field: 'title'})
     }
     //if (availableResolutions) {
      
   if (video.minAgeRestriction !== null && typeof video.minAgeRestriction !== "number" ) {
-      errors2.push({message: 'error ', filed: 'title'})
+      errors2.push({message: 'error ', field: 'title'})
     } else if (typeof video.minAgeRestriction === "number") {
       if (+video.minAgeRestriction <1 || +video.minAgeRestriction > 18) {
-        errors2.push({message: 'error ', filed: 'title'})
+        errors2.push({message: 'error ', field: 'title'})
       }
       if (video.publicationDate !== "string" ) {
-        errors2.push({message: 'error ', filed: 'title'})
+        errors2.push({message: 'error ', field: 'title'})
       }
     }
 
