@@ -68,7 +68,7 @@ app.get('/videos', (req: Request, res: Response) => {
   res.status(200).send(db.videos)
 })
 
-app.get('/videos/:id', (req: Request, res: Response) => {
+app.get('/videos/id', (req: Request, res: Response) => {
   const videoId = +req.params.id
   const video = db.videos.find(video => video.id === videoId)
   if (!video) return res.sendStatus(404)
