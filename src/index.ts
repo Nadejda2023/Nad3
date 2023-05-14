@@ -16,16 +16,7 @@ today.setDate(today.getDate() + 1);
 
 //TODO enum? P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"
 //testing message
-const enum resolutionType {
-  P144 = 'P144',
-  P240 = 'P240',
-  P360 = 'P360',
-  P480 = 'P480',
-  P720 = 'P720',
-  P1080 = 'P1080',
-  P1440 = 'P1440',
-  P2160 = 'p2160'
-}
+const resolutionType = ["P144","P240","P360","P480",'P720','P1080',"P1440","P2160"]
 export type videoType = {
   id: number,
   title: string,
@@ -34,7 +25,7 @@ export type videoType = {
   minAgeRestriction: null | number, 
   createdAt: string,
   publicationDate: string,
-  availableResolutions: Array<string>
+  availableResolutions: any
 }
 
 export type DB = {
@@ -51,7 +42,17 @@ const db: DB = {
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
     "publicationDate": new Date().toISOString(),
-    "availableResolutions": [resolutionType.P144]
+    "availableResolutions": ["string"]
+  },
+  {
+    "id": 1,
+    "title": "string",
+    "author": "string",
+    "canBeDownloaded": false,
+    "minAgeRestriction": null,
+    "createdAt": new Date().toISOString(),
+    "publicationDate": new Date().toISOString(),
+    "availableResolutions": ["string"]
   }
 ]
 }
@@ -88,14 +89,12 @@ app.post('/videos', (req: Request, res: Response) => {
     if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
      errors.push({message: 'error at author', filed: 'author'})
     }
-    if (Array.isArray(availableResolutions)) {
-      const length = availableResolutions.length
+    if (availableResolutions ) {
+      const length = availableResolutions.length //поменять проверку для энамкиБ а учше вообще убрать саму энемку заменив на массив 
       let resVal = availableResolutions.filter((value: string) => {
         return availableResolutions.includes(value)
       })
       if (resVal.length < length) {
-        errors.push({message: 'error at resolutions', filed: 'resolutions'})
-      } else {
         errors.push({message: 'error at resolutions', filed: 'resolutions'})
     } 
     
@@ -115,7 +114,7 @@ app.post('/videos', (req: Request, res: Response) => {
   }
 })
 
-app.put('/videos/id', (req: Request, res: Response) => {
+app.put('/videos/:id', (req: Request, res: Response) => {
   
     const videoId = +req.params.id
     const video = db.videos.find(video => video.id === videoId)
@@ -136,14 +135,12 @@ app.put('/videos/id', (req: Request, res: Response) => {
     if (!video.author || typeof video.author !== 'string' ||  video.author.length > 20) {
       errors2.push({message: 'error at author', filed: 'author'})
     }
-    if (Array.isArray(video.availableResolutions)) {
+    if (video.availableResolutions) {
       const length = video.availableResolutions.length
       let resVal = video.availableResolutions.filter((value: string) => {
         return availableResolutions.includes(value)
       })
       if (resVal.length < length) {
-        errors2.push({message: 'error at resolutions', filed: 'resolutions'})
-      } else {
         errors2.push({message: 'error at resolutions', filed: 'resolutions'})
     } 
   if (video.minAgeRestriction !== null && typeof video.minAgeRestriction !== "number" ) {
