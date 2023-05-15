@@ -80,9 +80,9 @@ app.post('/videos', (req: Request, res: Response) => {
     if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
      errors.push({message: 'error at author', field: 'author'})
     }
-    //if (availableResolutions.length > 0 && availableResolutions.indexOf(availableResolutions)) {
-
-    //}
+    if (availableResolutions.length < 0 && availableResolutions.indexOf(!resolutionType)) {
+      errors.push({message: 'error at availableResolutions', field: 'availableResolutions'})
+    }
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
     const newVideo: videoType = {
       id: today.getDate() + 1,
@@ -120,7 +120,9 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     if (!video.author || typeof video.author !== 'string' ||  video.author.length > 20) {
       errors2.push({message: 'error at author', field: 'author'})
     }
-    //if (availableResolutions) {
+    if (availableResolutions.length < 0 && resolutionType.indexOf("P")) {
+      errors2.push({message: 'error at availableResolutions', field: 'availableResolutions'})
+    }
      
     if (video.minAgeRestriction !== null && typeof video.minAgeRestriction !== "number" ) {
       errors2.push({message: 'error ', field: 'title'})
