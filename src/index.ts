@@ -150,7 +150,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
 
     const errors2 = []
 
-    if (!video.title || typeof video.title !== 'string' || !video.title.trim() || video.title.length > 40) {
+    if (video.title === null || typeof video.title !== 'string' || !video.title.trim() || video.title.length > 40) {
       errors2.push({message: 'error at title', field: 'title'})
     }
     if (!video.author || typeof video.author !== 'string' ||  video.author.length > 20) {
@@ -173,7 +173,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     if (+video.minAgeRestriction <1 || +video.minAgeRestriction > 18) {
         errors2.push({message: 'error ', field: 'canBeDownloaded'})
       }
-    if (video.publicationDate !== "string" ) {
+    if (video.publicationDate !== dataPost ) {
         errors2.push({message: 'error ', field: 'publicationDate'})
       }
       
