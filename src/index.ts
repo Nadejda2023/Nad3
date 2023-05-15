@@ -12,7 +12,7 @@ app.use(jsonBodyMiddleware)
 
 const port = process.env.PORT || 3003
 const today = new Date();
-today.setDate(today.getDate() + 1);
+
 
 
 const resolutionType = ["P144","P240","P360","P480",'P720','P1080',"P1440","P2160"]
@@ -23,8 +23,8 @@ export type videoType = {
   canBeDownloaded: boolean, 
   minAgeRestriction: null | number, 
   createdAt: string,
-  publicationDate: string,
-  availableResolutions: string[]
+  publicationDate: number | string,
+  availableResolutions: Array <string>
 }
 
 export type DB = {
@@ -41,9 +41,20 @@ const db: DB = {
     "canBeDownloaded": false,
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
-    "publicationDate": new Date().toISOString(),
+    "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+    "availableResolutions": ["P144"]
+  },
+  {
+    "id": 1,
+    "title": "string1",
+    "author": "string1",
+    "canBeDownloaded": false,
+    "minAgeRestriction": null,
+    "createdAt": new Date().toISOString(),
+    "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
     "availableResolutions": []
-  }
+  },
+
 ]
 }
  
@@ -58,13 +69,16 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
 app.get('/videos', (req: Request, res: Response) => {
   res.status(200).send(db.videos)
 })
+///get
 app.get('/videos/:id', (req: Request, res: Response) => {
-  const videoId = +req.params.id
-  const video = db.videos.find(video => video.id === videoId)
-  if (!video) return res.sendStatus(404)
-  return res.status(200).send(video)
- 
+  const video = db.videos.find(video => video.id === +req.params.id)
+  if (!video) { return res.sendStatus(404) }
+  db.videos = db.videos.filter(v => v.id !== +req.params.id) 
+  return res.sendStatus(204).send(video)
+  
 })
+ 
+
 
 
 app.post('/videos', (req: Request, res: Response) => {
@@ -85,13 +99,13 @@ app.post('/videos', (req: Request, res: Response) => {
     }
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
     const newVideo: videoType = {
-      id: today.getDate() + 1,
+      id: +req.params.id,
       title : title,
       author,
       canBeDownloaded: false,
       minAgeRestriction: null,
       createdAt: new Date().toISOString(),
-      publicationDate: today.toISOString(), 
+      publicationDate:  new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(), 
       availableResolutions
     }
     db.videos.push(newVideo)
@@ -131,13 +145,16 @@ app.put('/videos/:id', (req: Request, res: Response) => {
         errors2.push({message: 'error ', field: 'canBeDownloaded'})
       }
     if (video.publicationDate !== "string" ) {
-        errors2.push({message: 'error ', field: 'title'})
+        errors2.push({message: 'error ', field: 'publicationDate'})
       }
       
     }
+    if (video.canBeDownloaded !== true) {
+      errors2.push({message: 'error ', field: 'jhh'})
+    }
     if (errors2.length > 0) return res.status(400).send({errorsMessages: errors2})
     
-     res.sendStatus(204)
+     res.sendStatus(204).send(video)
    }
   )
     
