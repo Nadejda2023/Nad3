@@ -174,7 +174,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     if (+video.minAgeRestriction <1 || +video.minAgeRestriction > 18) {
         errors2.push({message: 'error ', field: 'minAgeRestriction'})
       }
-    if (req.body.publicationDate !== tod.toISOString().length ) {
+    if (!req.body.publicationDate) {   //!== tod.toISOString().length ) {
        errors2.push({message: 'error ', field: 'publicationDate'})
     }
       
