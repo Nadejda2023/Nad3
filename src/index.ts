@@ -176,8 +176,8 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       }
       
     }
-    if (video.canBeDownloaded !== true) {
-      errors2.push({message: 'error ', field: 'jhh'})
+    if (typeof(video.canBeDownloaded) !== "boolean") {
+      errors2.push({message: 'error ', field: 'canBeDownloaded'})
     }
     if (errors2.length > 0) return res.status(400).send({errorsMessages: errors2})
     
