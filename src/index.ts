@@ -136,10 +136,10 @@ app.post('/videos', (req: Request, res: Response) => {
 )
 
 app.put('/videos/:id', (req: Request, res: Response) => {
-  
   const videoId = +req.params.id
   const video = db.videos.find(video => video.id === videoId)
-  if (!video) return res.sendStatus(404)
+  if (video) { 
+ res.sendStatus(204)
     video.author = req.body.author
     video.title = req.body.title
     video.canBeDownloaded = req.body.canBeDownloaded
@@ -178,13 +178,14 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       //}
       
     }
-    if (typeof(video.canBeDownloaded) !== "boolean") {
+    if (typeof(video.canBeDownloaded) !== "boolean" || req.body.canBeDownloaded === "string") {
       errors2.push({message: 'error ', field: 'canBeDownloaded'})
     }
     if (errors2.length > 0) return res.status(400).send({errorsMessages: errors2})
-    
-  db.videos = db.videos.filter(v => v.id !== videoId)
-  return res.sendStatus(204)
+  } else {
+    db.videos = db.videos.filter(v => v.id !== videoId)
+    res.sendStatus(404) 
+  }
   })
    
   
