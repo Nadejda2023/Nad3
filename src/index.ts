@@ -150,7 +150,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
 
     const errors2 = []
 
-    if (video.title === null || typeof video.title !== 'string' || !video.title.trim() || video.title.length > 40) {
+    if (!video.title || video.title === null || typeof video.title !== 'string' || !video.title.trim() || video.title.length > 40) {
       errors2.push({message: 'error at title', field: 'title'})
     }
     if (!video.author || typeof video.author !== 'string' ||  video.author.length > 20) {
@@ -178,7 +178,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       //}
       
     }
-    if (typeof(video.canBeDownloaded) !== "boolean" || req.body.canBeDownloaded === "string") {
+    if (typeof(video.canBeDownloaded) !== "boolean" || typeof(video.canBeDownloaded) === "string") {
       errors2.push({message: 'error ', field: 'canBeDownloaded'})
     }
     if (errors2.length > 0) return res.status(400).send({errorsMessages: errors2})
