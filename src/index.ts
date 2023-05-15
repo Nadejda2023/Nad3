@@ -11,7 +11,9 @@ app.use(jsonBodyMiddleware)
 
 
 const port = process.env.PORT || 3003
-const today = new Date();
+const tod = new Date();
+const created = new Date().toISOString();
+const dataPost = new Date(tod.setDate(tod.getDate()+1)).toISOString();
 
 
 
@@ -48,8 +50,8 @@ const db: DB = {
     "author": "string",
     "canBeDownloaded": false,
     "minAgeRestriction": null,
-    "createdAt": new Date().toISOString(),
-    "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+    "createdAt": created,
+    "publicationDate": dataPost,
     "availableResolutions": ["P144"]
   },
   {
@@ -58,8 +60,8 @@ const db: DB = {
     "author": "string1",
     "canBeDownloaded": false,
     "minAgeRestriction": null,
-    "createdAt": new Date().toISOString(),
-    "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+    "createdAt": created,
+    "publicationDate": dataPost,
     "availableResolutions": []
   },
 
@@ -124,8 +126,8 @@ app.post('/videos', (req: Request, res: Response) => {
       author,
       canBeDownloaded: false,
       minAgeRestriction: null,
-      createdAt: new Date().toISOString(),
-      publicationDate:  new Date((Date.now() + 1000 * 60 * 60 * 24)+1).toISOString(), 
+      createdAt: created,
+      publicationDate: dataPost, 
       availableResolutions
     }
     db.videos.push(newVideo)
