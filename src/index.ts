@@ -25,7 +25,8 @@ const resolution: Array<string> = [
   'P720',
   'P1080',
   'P1440',
-  'P2160']
+  'P2160'
+]
 export type videoType = {
   id: number,
   title: string,
@@ -138,7 +139,7 @@ app.post('/videos', (req: Request, res: Response) => {
 app.put('/videos/:id', (req: Request, res: Response) => {
   const videoId = +req.params.id
   const video = db.videos.find(video => video.id === videoId)
-  if (!video) return res.sendStatus(404)
+  if (video) { 
   
     video.author = req.body.author
     video.title = req.body.title
@@ -184,11 +185,14 @@ app.put('/videos/:id', (req: Request, res: Response) => {
   
     if (errors2.length > 0){
     res.status(400).send({errorsMessages: errors2})
-    }  
-    db.videos = db.videos.filter(v => v.id !== videoId)
-    res.sendStatus(204) 
   }
-  )
+  res.sendStatus(204)
+  
+  } else {
+    db.videos = db.videos.filter(v => v.id !== videoId)
+    res.sendStatus(404) 
+  }
+  })
    
   
     
