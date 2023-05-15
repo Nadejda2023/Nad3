@@ -181,7 +181,11 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     if (typeof(video.canBeDownloaded) !== "boolean" || typeof(video.canBeDownloaded) === "string") {
       errors2.push({message: 'error ', field: 'canBeDownloaded'})
     }
-    if (errors2.length > 0) return res.status(400).send({errorsMessages: errors2})
+  
+    if (errors2.length > 0){
+    res.status(400).send({errorsMessages: errors2})
+  }
+  
   } else {
     db.videos = db.videos.filter(v => v.id !== videoId)
     res.sendStatus(404) 
