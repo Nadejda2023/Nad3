@@ -41,7 +41,7 @@ const db: DB = {
     "canBeDownloaded": false,
     "minAgeRestriction": null,
     "createdAt": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
-    "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+    "publicationDate": new Date((Date.now() + 1000 * 60 * 60 * 24)+1).toISOString(),
     "availableResolutions": ["P144"]
   },
   {
@@ -51,7 +51,7 @@ const db: DB = {
     "canBeDownloaded": false,
     "minAgeRestriction": null,
     "createdAt": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
-    "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+    "publicationDate": new Date((Date.now() + 1000 * 60 * 60 * 24)+1).toISOString(),
     "availableResolutions": []
   },
 
@@ -105,7 +105,7 @@ app.post('/videos', (req: Request, res: Response) => {
       canBeDownloaded: false,
       minAgeRestriction: null,
       createdAt: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
-      publicationDate:  new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(), 
+      publicationDate:  new Date((Date.now() + 1000 * 60 * 60 * 24)+1).toISOString(), 
       availableResolutions
     }
     db.videos.push(newVideo)
