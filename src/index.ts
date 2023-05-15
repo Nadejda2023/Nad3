@@ -15,7 +15,15 @@ const today = new Date();
 
 
 
-const resolutionType = ['P144','P240','P360','P480','P720','P1080','P1440','P2160']
+const resolution: Array<string> = [
+  'P144',
+  'P240',
+  'P360',
+  'P480',
+  'P720',
+  'P1080',
+  'P1440',
+  'P2160']
 export type videoType = {
   id: number,
   title: string,
@@ -58,7 +66,9 @@ const db: DB = {
 ]
 }
  
-
+app.get('/', (req: Request, res: Response) => {
+  res.status(200).send(db.videos)
+})
 app.delete('/testing/all-data', (req: Request, res: Response) => {
   db.videos = []
   res.sendStatus(204)
@@ -70,12 +80,15 @@ app.get('/videos', (req: Request, res: Response) => {
   res.status(200).send(db.videos)
 })
 ///get
-app.get('/videos/:id', (req: Request<{ id: string }>, res: Response) => {
+app.get('/videos/:id', (req: Request, res: Response) => {
   const videoId = +req.params.id
   const video = db.videos.find(video => video.id === videoId)
-  if (!video) return res.sendStatus(404)
-  db.videos = db.videos.filter(v => v.id !== videoId)
-  return res.sendStatus(200).send(video)
+  if (video) { 
+     res.status(200).send(video) 
+  } else {
+    res.sendStatus(404)
+  }
+
 })
  
 
@@ -94,7 +107,14 @@ app.post('/videos', (req: Request, res: Response) => {
     if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
      errors.push({message: 'error at author', field: 'author'})
     }
-    if (!availableResolutions) {
+    if (req.body.availableResolutions < 1) {
+      errors.push({message: 'error at availableResolutions', field: 'availableResolutions'})
+    }
+    let prov: boolean = true
+    req.body.availableResolutions.forEach((res:string) => {
+      if(!resolution.includes(res)) prov = false
+    })
+    if(!prov) {
       errors.push({message: 'error at availableResolutions', field: 'availableResolutions'})
     }
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
@@ -124,7 +144,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     video.minAgeRestriction = req.body.minAgeRestriction
     video.publicationDate = req.body.publicationDate
     video.availableResolutions = req.body.availableResolutions
-    let availableResolutions = video.availableResolutions
+
 
     const errors2 = []
 
@@ -134,7 +154,14 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     if (!video.author || typeof video.author !== 'string' ||  video.author.length > 20) {
       errors2.push({message: 'error at author', field: 'author'})
     }
-    if (availableResolutions.length < 0 && resolutionType.indexOf("P")) {
+    if (req.body.availableResolutions < 1) {
+      errors2.push({message: 'error at availableResolutions', field: 'availableResolutions'})
+    }
+    let prov: boolean = true
+    video.availableResolutions.forEach((res:string) => {
+      if(!resolution.includes(res)) prov = false
+    })
+    if(!prov) {
       errors2.push({message: 'error at availableResolutions', field: 'availableResolutions'})
     }
      
@@ -162,9 +189,9 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     
     
 app.delete('/videos/:id', (req: Request<{id:string}>, res: Response) => {
-  const videoId = +req.params.id
+  const videoId = + new Date()
   const video = db.videos.find(video => video.id === videoId)
-  if (!video) return res.sendStatus(404)
+if (!video) return res.sendStatus(404)
   db.videos = db.videos.filter(v => v.id !== videoId)
   return res.sendStatus(204)
   })
