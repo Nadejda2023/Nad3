@@ -119,7 +119,7 @@ app.post('/videos', (req: Request, res: Response) => {
     }
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
     const newVideo: videoType = {
-      id: +req.params.id,
+      id: + new Date(),
       title : title,
       author,
       canBeDownloaded: false,
@@ -189,7 +189,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     
     
 app.delete('/videos/:id', (req: Request<{id:string}>, res: Response) => {
-  const videoId = + new Date()
+  const videoId = +req.params.id
   const video = db.videos.find(video => video.id === videoId)
 if (!video) return res.sendStatus(404)
   db.videos = db.videos.filter(v => v.id !== videoId)
