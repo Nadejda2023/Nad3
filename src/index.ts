@@ -138,8 +138,8 @@ app.post('/videos', (req: Request, res: Response) => {
 app.put('/videos/:id', (req: Request, res: Response) => {
   const videoId = +req.params.id
   const video = db.videos.find(video => video.id === videoId)
-  if (video) { 
- res.sendStatus(204)
+  if (!video) return res.sendStatus(404)
+  
     video.author = req.body.author
     video.title = req.body.title
     video.canBeDownloaded = req.body.canBeDownloaded
@@ -184,13 +184,11 @@ app.put('/videos/:id', (req: Request, res: Response) => {
   
     if (errors2.length > 0){
     res.status(400).send({errorsMessages: errors2})
-  }
-  
-  } else {
+    }  
     db.videos = db.videos.filter(v => v.id !== videoId)
-    res.sendStatus(404) 
+    res.sendStatus(204) 
   }
-  })
+  )
    
   
     
