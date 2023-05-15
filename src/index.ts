@@ -121,7 +121,7 @@ app.post('/videos', (req: Request, res: Response) => {
     }
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
     const newVideo: videoType = {
-      id: + new Date(),
+      id: + (new Date()),
       title : title,
       author,
       canBeDownloaded: false,
