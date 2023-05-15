@@ -171,7 +171,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
       errors2.push({message: 'error ', field: 'title'})
     } else if (typeof video.minAgeRestriction === "number") {
     if (+video.minAgeRestriction <1 || +video.minAgeRestriction > 18) {
-        errors2.push({message: 'error ', field: 'canBeDownloaded'})
+        errors2.push({message: 'error ', field: 'minAgeRestriction'})
       }
     //if (video.publicationDate !== dataPost ) {
        // errors2.push({message: 'error ', field: 'publicationDate'})
