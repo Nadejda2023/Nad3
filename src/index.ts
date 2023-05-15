@@ -15,7 +15,7 @@ const today = new Date();
 
 
 
-const resolutionType = ["P144","P240","P360","P480",'P720','P1080',"P1440","P2160"]
+const resolutionType = ['P144','P240','P360','P480','P720','P1080','P1440','P2160']
 export type videoType = {
   id: number,
   title: string,
@@ -40,8 +40,8 @@ const db: DB = {
     "author": "string",
     "canBeDownloaded": false,
     "minAgeRestriction": null,
-    "createdAt": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
-    "publicationDate": new Date((Date.now() + 1000 * 60 * 60 * 24)+1).toISOString(),
+    "createdAt": new Date().toISOString(),
+    "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
     "availableResolutions": ["P144"]
   },
   {
@@ -50,8 +50,8 @@ const db: DB = {
     "author": "string1",
     "canBeDownloaded": false,
     "minAgeRestriction": null,
-    "createdAt": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
-    "publicationDate": new Date((Date.now() + 1000 * 60 * 60 * 24)+1).toISOString(),
+    "createdAt": new Date().toISOString(),
+    "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
     "availableResolutions": []
   },
 
@@ -70,12 +70,12 @@ app.get('/videos', (req: Request, res: Response) => {
   res.status(200).send(db.videos)
 })
 ///get
-app.get('/videos/:id', (req: Request, res: Response) => {
+app.get('/videos/:id', (req: Request<{ id: string }>, res: Response) => {
   const videoId = +req.params.id
   const video = db.videos.find(video => video.id === videoId)
   if (!video) return res.sendStatus(404)
   db.videos = db.videos.filter(v => v.id !== videoId)
-  return res.sendStatus(204).send(video)
+  return res.sendStatus(200).send(video)
 })
  
 
@@ -94,7 +94,7 @@ app.post('/videos', (req: Request, res: Response) => {
     if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
      errors.push({message: 'error at author', field: 'author'})
     }
-    if (availableResolutions.length < 0 && availableResolutions.indexOf(!resolutionType)) {
+    if (!availableResolutions) {
       errors.push({message: 'error at availableResolutions', field: 'availableResolutions'})
     }
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
@@ -104,7 +104,7 @@ app.post('/videos', (req: Request, res: Response) => {
       author,
       canBeDownloaded: false,
       minAgeRestriction: null,
-      createdAt: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+      createdAt: new Date().toISOString(),
       publicationDate:  new Date((Date.now() + 1000 * 60 * 60 * 24)+1).toISOString(), 
       availableResolutions
     }
@@ -161,7 +161,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
   
     
     
-app.delete('/videos/:id', (req: Request, res: Response) => {
+app.delete('/videos/:id', (req: Request<{id:string}>, res: Response) => {
   const videoId = +req.params.id
   const video = db.videos.find(video => video.id === videoId)
   if (!video) return res.sendStatus(404)
