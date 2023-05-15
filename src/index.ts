@@ -40,7 +40,7 @@ const db: DB = {
     "author": "string",
     "canBeDownloaded": false,
     "minAgeRestriction": null,
-    "createdAt": new Date().toISOString(),
+    "createdAt": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
     "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
     "availableResolutions": ["P144"]
   },
@@ -50,7 +50,7 @@ const db: DB = {
     "author": "string1",
     "canBeDownloaded": false,
     "minAgeRestriction": null,
-    "createdAt": new Date().toISOString(),
+    "createdAt": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
     "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
     "availableResolutions": []
   },
@@ -71,11 +71,11 @@ app.get('/videos', (req: Request, res: Response) => {
 })
 ///get
 app.get('/videos/:id', (req: Request, res: Response) => {
-  const video = db.videos.find(video => video.id === +req.params.id)
-  if (!video) { return res.sendStatus(404) }
-  db.videos = db.videos.filter(v => v.id !== +req.params.id) 
+  const videoId = +req.params.id
+  const video = db.videos.find(video => video.id === videoId)
+  if (!video) return res.sendStatus(404)
+  db.videos = db.videos.filter(v => v.id !== videoId)
   return res.sendStatus(204).send(video)
-  
 })
  
 
@@ -104,7 +104,7 @@ app.post('/videos', (req: Request, res: Response) => {
       author,
       canBeDownloaded: false,
       minAgeRestriction: null,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
       publicationDate:  new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(), 
       availableResolutions
     }
@@ -115,9 +115,9 @@ app.post('/videos', (req: Request, res: Response) => {
 
 app.put('/videos/:id', (req: Request, res: Response) => {
   
-    const videoId = +req.params.id
-    const video = db.videos.find(video => video.id === videoId)
-    if (!video) return res.sendStatus(404)
+  const videoId = +req.params.id
+  const video = db.videos.find(video => video.id === videoId)
+  if (!video) return res.sendStatus(404)
     video.author = req.body.author
     video.title = req.body.title
     video.canBeDownloaded = req.body.canBeDownloaded
@@ -154,9 +154,11 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     }
     if (errors2.length > 0) return res.status(400).send({errorsMessages: errors2})
     
-     res.sendStatus(204).send(video)
-   }
-  )
+  db.videos = db.videos.filter(v => v.id !== videoId)
+  return res.sendStatus(204)
+  })
+   
+  
     
     
 app.delete('/videos/:id', (req: Request, res: Response) => {
