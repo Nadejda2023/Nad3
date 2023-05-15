@@ -173,9 +173,9 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     if (+video.minAgeRestriction <1 || +video.minAgeRestriction > 18) {
         errors2.push({message: 'error ', field: 'canBeDownloaded'})
       }
-    if (video.publicationDate !== dataPost ) {
-        errors2.push({message: 'error ', field: 'publicationDate'})
-      }
+    //if (video.publicationDate !== dataPost ) {
+       // errors2.push({message: 'error ', field: 'publicationDate'})
+      //}
       
     }
     if (typeof(video.canBeDownloaded) !== "boolean") {
